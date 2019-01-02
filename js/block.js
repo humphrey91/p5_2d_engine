@@ -10,9 +10,9 @@
  * @id
  * Defines Object ID
  * 
- * @points - getter
- * Returns all 5 block points 
- * [center, topLeft, topRight, bottomRight, bottomLeft]
+ * @axes - getter
+ * Returns all 4 axes
+ * [topLeft, topRight, bottomRight, bottomLeft]
  * 
  * @rotation
  * Defines Block rotation angle. A positive angle rotates the Block clockwise.
@@ -24,7 +24,6 @@ class Block extends gameObject {
         super(x,y,id)
         this.width = w
         this.height = h
-        this.points = this.calcPoints
     }
 
     shape() {
@@ -41,14 +40,6 @@ class Block extends gameObject {
         }
     }
 
-    get rotation() {
-        return this._rotation
-    }
-
-    set rotation(rotation) {
-        this._rotation = rotation
-    }
-
     draw(){
         this.shape()
     }
@@ -56,19 +47,5 @@ class Block extends gameObject {
     update() {
         super.update()
         this.draw()
-    }
-
-    get calcPoints() {
-        let a = 0.5 * this.width
-        let b = 0.5 * this.height
-        return {
-            center: createVector(this.position.x,this.position.y),
-            topLeft: createVector(this.position.x - a,this.position.y - b),
-            topRight: createVector(this.position.x + a,this.position.y - b),
-            bottomRight: createVector(this.position.x + a,this.position.y + b),
-            bottomLeft: createVector(this.position.x - a,this.position.y + b)
-        }
-    }
-
-    
+    }        
 }
