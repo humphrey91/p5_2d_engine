@@ -6,25 +6,14 @@
  * @w
  * @h
  * Defines width and height of Block
- * 
- * @id
- * Defines Object ID
- * 
- * @vertices - getter
- * Returns all 4 vertices
- * [topLeft, topRight, bottomRight, bottomLeft]
- * 
- * @rotation
- * Defines Block rotation angle. A positive angle rotates the Block clockwise.
  */
-
-
 class Block extends GameObject {
     constructor(x,y,w,h,id) {
         super(x,y,id)
         this.width = w
         this.height = h
         this.sides = 4
+        this.distances = this.setDistances()
     }
 
     shape() {
@@ -37,25 +26,17 @@ class Block extends GameObject {
         pop()
     }
 
-    draw(){
+    update() {
+        super.update()
         this.shape()
     }
 
-    update() {
-        super.update()
-        this.draw()
-    }        
-
-    get vertices() {
-        let Ox = 0.5 * this.width
-        let Oy = 0.5 * this.height
-
+    setDistances() {
         return [
-            createVector(this.position.x + (Oy * sin(this.rotation)) - (Ox * cos(this.rotation)), this.position.y - (Oy * cos(this.rotation)) - (Ox * sin(this.rotation))),
-            createVector(this.position.x + (Ox * cos(this.rotation)) + (Oy * sin(this.rotation)), this.position.y + (Ox * sin(this.rotation)) - (Oy * cos(this.rotation))),
-            createVector(this.position.x + (Ox * cos(this.rotation)) - (Oy * sin(this.rotation)), this.position.y + (Ox * sin(this.rotation)) + (Oy * cos(this.rotation))),
-            createVector(this.position.x - (Ox * cos(this.rotation)) - (Oy * sin(this.rotation)), this.position.y - (Ox * sin(this.rotation)) + (Oy * cos(this.rotation)))
+            createVector(-this.width / 2,this.height / 2),
+            createVector(-this.width / 2,-this.height / 2),
+            createVector(this.width / 2,-this.height / 2),
+            createVector(this.width / 2,this.height / 2)
         ]
-        
     }
 }

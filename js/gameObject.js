@@ -1,3 +1,26 @@
+/**
+ * @position
+ * A Vector that defines the center pont of a GameObject
+ * 
+ * @velocity
+ * A velocity vector
+ * 
+ * @acceleration
+ * An acceleration vector
+ * 
+ * @color
+ * The color of the object
+ * 
+ * @id
+ * A unique identifier
+ * 
+ * @rotation
+ * Angle in degrees of object rotation
+ * 
+ * @gravity
+ * If object should have gravity applied
+ * 
+ */
 class GameObject {
     constructor(x,y,id){
         this.position = createVector(x, y)
@@ -24,15 +47,26 @@ class GameObject {
         this.move()
     }
 
+    get vertices() {
+        // [cos𝜃 −sin𝜃][𝑥]=[𝑥 cos𝜃 − 𝑦 sin𝜃]
+        // [sin𝜃  cos𝜃][𝑦]=[𝑥 sin𝜃 + 𝑦 cos𝜃]
+        let r = this.rotation
+        let vertices = []
+        this.distances.forEach(distance => {
+            vertices.push(createVector(distance.x * cos(r) - distance.y * sin(r) + this.position.x, distance.x * sin(r) + distance.y * cos(r) + this.position.y))
+        })
+        return vertices
+    }
+
     checkCollision(objects) {
         let hits = []
 
         let otherPieces = objects.filter((obj) => {
             return obj != this 
         })
-        
-        // let closestPieces = otherPieces.sort((a,b) => {this.position.dist(a.position) < this.position.dist(b.position)}).slice(0,5)
 
+        // projects sides against all axis of 2 objects and determines if all of the sides are overlapping
+        // see Separating Axis Theorem (SAT) https://en.wikipedia.org/wiki/Hyperplane_separation_theorems
         otherPieces.forEach(element => {
             let hit = true
             let axes1 = this.normalAxes()
@@ -64,6 +98,7 @@ class GameObject {
     }
 
     normalAxes() {
+        // gets an axis so we can project the side against it
         const vertices = this.vertices
         let normalAxis = []
         for (let i = 0; i < vertices.length; i++) {
@@ -80,6 +115,7 @@ class GameObject {
     }
 
     projection(axis) {
+        // projects side against axis
         const vertices = this.vertices
         let min = axis.dot(vertices[0])
         let max = min
@@ -95,7 +131,7 @@ class GameObject {
     }
 
     overlap(element1,element2) {
-        if (Math.max(element1[0], element2[0]) <= Math.min(element1[1], element2[1])) { return true }
+        if (Math.max(element1[0], element2[0]) < Math.min(element1[1], element2[1])) { return true }
     }
 
     handleCollision(hits) {
