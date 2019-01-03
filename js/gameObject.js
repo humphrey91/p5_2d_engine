@@ -1,4 +1,4 @@
-class gameObject {
+class GameObject {
     constructor(x,y,id){
         this.position = createVector(x, y)
         this.velocity = createVector(0,0)
@@ -6,10 +6,13 @@ class gameObject {
         this.color = 'black'
         this.id = id
         this.rotation = null
+        this.graviy = false
     }
 
     applyGravity() {
-        this.velocity.add(this.acceleration)
+        if (this.gravity) {
+            this.velocity.add(this.acceleration)
+        }
     }
 
     move() {
@@ -17,7 +20,7 @@ class gameObject {
     }
 
     update() {
-        // this.applyGravity()
+        this.applyGravity()
         this.move()
     }
 
@@ -58,27 +61,6 @@ class gameObject {
         });
         
         this.handleCollision(hits)      
-    }
-
-    get vertices() {
-        let Ox = 0.5 * this.width
-        let Oy = 0.5 * this.height
-
-        if (this.rotation === null || this.rotation === 0) {
-            return [
-                createVector(this.position.x - Ox,this.position.y - Oy),
-                createVector(this.position.x + Ox,this.position.y - Oy),
-                createVector(this.position.x + Ox,this.position.y + Oy),
-                createVector(this.position.x - Ox,this.position.y + Oy)
-            ]
-        } else {
-            return [
-                createVector(this.position.x + (Oy * sin(this.rotation)) - (Ox * cos(this.rotation)), this.position.y - (Oy * cos(this.rotation)) - (Ox * sin(this.rotation))),
-                createVector(this.position.x + (Ox * cos(this.rotation)) + (Oy * sin(this.rotation)), this.position.y + (Ox * sin(this.rotation)) - (Oy * cos(this.rotation))),
-                createVector(this.position.x + (Ox * cos(this.rotation)) - (Oy * sin(this.rotation)), this.position.y + (Ox * sin(this.rotation)) + (Oy * cos(this.rotation))),
-                createVector(this.position.x - (Ox * cos(this.rotation)) - (Oy * sin(this.rotation)), this.position.y - (Ox * sin(this.rotation)) + (Oy * cos(this.rotation)))
-            ]
-        }
     }
 
     normalAxes() {

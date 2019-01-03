@@ -15,4 +15,10 @@ class Collection extends Array {
             this[i].update()
         }
     }
+
+    checkCollision() {
+        for (let i = 0; i < this.length; i++) {
+            this[i].checkCollision(this)
+        }
+    }
 }

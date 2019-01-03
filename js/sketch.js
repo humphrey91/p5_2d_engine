@@ -8,42 +8,25 @@ function setup() {
   rectMode(CENTER)
   angleMode(DEGREES)  
   canvas = createCanvas(window.innerWidth * screenSize, window.innerHeight * screenSize)
-  piece = new Block(0, canvas.height / 2, 10, canvas.height - 11, ++idCounter)
-  gamePieces.push(piece)
-  piece = new Block(canvas.width, canvas.height / 2, 10, canvas.height - 11, ++idCounter)
-  gamePieces.push(piece)
-  piece = new Block(canvas.width / 2, 0, canvas.width - 11, 10, ++idCounter)
-  gamePieces.push(piece)
-  piece = new Block(canvas.width / 2, canvas.height , canvas.width - 11, 10, ++idCounter)
-  gamePieces.push(piece)
   createGamePieces()
-  gamePieces.hero = gamePieces[0]
+  rotation = 0
 }
 
 function draw() {  
+  rotation += 1
   background(200) 
   gamePieces.draw()
   gamePieces.update()
-  gamePieces.forEach(piece => {
-    piece.checkCollision(gamePieces)
-
-    if (piece.position.x > canvas.width || piece.position.x < 0) {
-      gamePieces = gamePieces.filter(block => {
-        return block.id != piece.id
-      })
-    }
-  })
-  if (gamePieces.length === 1) {
-    createGamePieces()
-  }
+  gamePieces.checkCollision()
+  gamePieces[1].rotation = rotation
+  gamePieces[0].position.x = mouseX
+  gamePieces[0].position.y = mouseY
 }
 
 // create all game pieces
 function createGamePieces() {  
-  for (let i = 0; i < 5; i++) {
-    piece = new Block(random(200,400), random(300,500),10,10, ++idCounter)
-    gamePieces.push(piece)
-    piece.rotation = random(0,180)
-    piece.velocity = createVector(random(-5,5),random(-5,5))
-  }
+  piece = new Block(300,150,100,100, ++idCounter)
+  gamePieces.push(piece)
+  piece = new Triangle(200,300,300,0,400,300, ++idCounter)
+  gamePieces.push(piece)
 }
